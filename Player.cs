@@ -4,21 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blackjack;
-
-public class Player
+namespace Blackjack
 {
 
-    public List<Hand> Hands;
-
-    public Player()
+    public class Player
     {
-        Hands = new List<Hand>();
-    }
 
-    public void ClearHands()
-    {
-        Hands.Clear();
-    }
+        public List<Hand> Hands;
 
+        public Player()
+        {
+            Hands = new List<Hand>();
+        }
+
+        public void ClearHands()
+        {
+            Hands.Clear();
+        }
+
+    }
 }

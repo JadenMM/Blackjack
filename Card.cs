@@ -4,25 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Blackjack;
-
-public class CardSuit
+namespace Blackjack
 {
-    public string Value { get; private set; }
 
-    private CardSuit(string value) { Value = value; }
+    public class CardSuit
+    {
+        public string Value { get; private set; }
 
-    public static CardSuit SPADE { get { return new CardSuit("♠"); } }
-    public static CardSuit CLUB { get { return new CardSuit("♣"); } }
-    public static CardSuit HEART { get { return new CardSuit("♥"); } }
-    public static CardSuit DIAMOND { get { return new CardSuit("♦"); } }
+        private CardSuit(string value) { Value = value; }
 
-}
+        public static CardSuit SPADE { get { return new CardSuit("♠"); } }
+        public static CardSuit CLUB { get { return new CardSuit("♣"); } }
+        public static CardSuit HEART { get { return new CardSuit("♥"); } }
+        public static CardSuit DIAMOND { get { return new CardSuit("♦"); } }
 
-public enum CardType
-{
-    ACE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5, SIX = 6, SEVEN = 7, EIGHT = 8, NINE = 9, TEN = 10, JACK = 11, QUEEN = 12, KING = 13
-}
+    }
+
+    public enum CardType
+    {
+        ACE = 1, TWO = 2, THREE = 3, FOUR = 4, FIVE = 5, SIX = 6, SEVEN = 7, EIGHT = 8, NINE = 9, TEN = 10, JACK = 11, QUEEN = 12, KING = 13
+    }
 
     public class Card
     {
@@ -37,13 +38,21 @@ public enum CardType
 
         public int GetValue(bool lowAce = false)
         {
-            int value = CardType switch
+
+            int value = (int)CardType;
+
+            switch (CardType)
             {
-                CardType.JACK => 10,
-                CardType.QUEEN => 10,
-                CardType.KING => 10,
-                _ => (int)CardType,
-            };
+                case CardType.JACK:
+                    value = 10;
+                break;
+                case CardType.QUEEN:
+                    value = 10;
+                break;
+                case CardType.KING:
+                    value = 10;
+                break;
+            }
 
             if (CardType == CardType.ACE && !lowAce)
             {
@@ -56,16 +65,32 @@ public enum CardType
         public override string ToString()
         {
 
-            string str = CardType switch
+            string str = ((int)CardType).ToString();
+
+            switch (CardType)
             {
-                CardType.ACE => "A",
-                CardType.TEN => "T",
-                CardType.JACK => "J",
-                CardType.QUEEN => "Q",
-                CardType.KING => "K",
-                _ => ((int)CardType).ToString(),
-            };
+                case CardType.ACE:
+                    str = "A";
+                break;
+
+                case CardType.TEN:
+                    str = "T";
+                break;
+
+                case CardType.JACK:
+                    str = "J";
+                break;
+
+                case CardType.QUEEN:
+                    str = "Q";
+                break;
+
+                case CardType.KING:
+                    str = "K";
+                break;
+            }
 
             return $"{CardSuit.Value} {str}";
         }
     }
+}

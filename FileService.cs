@@ -1,61 +1,64 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Blackjack;
-
-public class FileService
+namespace Blackjack
 {
 
-    private static readonly string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/ArbutusInteractive/Blackjack/";
-
-    public static void SaveStats(Stats stats)
+    public class FileService
     {
-        string json = JsonSerializer.Serialize(stats);
 
-        if (!Directory.Exists(FilePath))
-            Directory.CreateDirectory(FilePath);
+        private static readonly string FilePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/ArbutusInteractive/Blackjack/";
 
-        File.WriteAllText(FilePath + "stats.json", json);
-    }
-
-    public static Stats LoadStats()
-    {
-        if (!File.Exists(FilePath + "stats.json"))
+        public static void SaveStats(Stats stats)
         {
-            var newStat = new Stats();
-            SaveStats(newStat);
-            return newStat;
+            string json = JsonConvert.SerializeObject(stats);
+
+            if (!Directory.Exists(FilePath))
+                Directory.CreateDirectory(FilePath);
+
+            File.WriteAllText(FilePath + "stats.json", json);
         }
 
-        string raw = File.ReadAllText(FilePath + "stats.json");
+        public static Stats LoadStats()
+        {
+            if (!File.Exists(FilePath + "stats.json"))
+            {
+                var newStat = new Stats();
+                SaveStats(newStat);
+                return newStat;
+            }
 
-        var stats = JsonSerializer.Deserialize<Stats>(raw);
+            string raw = File.ReadAllText(FilePath + "stats.json");
 
-        return stats;
+            var stats = JsonConvert.DeserializeObject<Stats>(raw);
+
+            return stats;
+        }
+
     }
 
-}
-
-[Serializable]
-public class Stats
-{
-    public float Coins { get; set; } = 500;
-    public int Wins { get; set; }
-    public int Losses { get; set; }
-    public int Ties { get; set; }
-    public int Blackjacks { get; set; }
-
-    public void ShowStats()
+    [Serializable]
+    public class Stats
     {
-        Console.WriteLine("Player Stats");
-        Console.WriteLine($"Coins: {Coins}");
-        Console.WriteLine($"Blackjacks: {Blackjacks}");
-        Console.WriteLine($"Wins: {Wins}");
-        Console.WriteLine($"Ties: {Ties}");
-        Console.WriteLine($"Losses: {Losses}");
+        public float Coins { get; set; } = 500;
+        public int Wins { get; set; }
+        public int Losses { get; set; }
+        public int Ties { get; set; }
+        public int Blackjacks { get; set; }
+
+        public void ShowStats()
+        {
+            Console.WriteLine("Player Stats");
+            Console.WriteLine($"Coins: {Coins}");
+            Console.WriteLine($"Blackjacks: {Blackjacks}");
+            Console.WriteLine($"Wins: {Wins}");
+            Console.WriteLine($"Ties: {Ties}");
+            Console.WriteLine($"Losses: {Losses}");
+        }
     }
 }
